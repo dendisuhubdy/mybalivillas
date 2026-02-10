@@ -1,24 +1,54 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { saveProperty, unsaveProperty } from '@/lib/api';
 
 interface SaveButtonProps {
   propertyId: string;
+  initialSaved?: boolean;
 }
 
-export default function SaveButton({ propertyId }: SaveButtonProps) {
-  const [isSaved, setIsSaved] = useState(false);
+export default function SaveButton({ propertyId, initialSaved = false }: SaveButtonProps) {
+  const router = useRouter();
+  const [isSaved, setIsSaved] = useState(initialSaved);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSave = (e: React.MouseEvent) => {
+  const handleSave = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsSaved(!isSaved);
+
+    const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
+    if (!token) {
+      router.push('/login');
+      return;
+    }
+
+    if (isLoading) return;
+    setIsLoading(true);
+
+    try {
+      if (isSaved) {
+        await unsaveProperty(propertyId);
+        setIsSaved(false);
+      } else {
+        await saveProperty(propertyId);
+        setIsSaved(true);
+      }
+    } catch {
+      // Silently fail - the UI will stay in current state
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <button
       onClick={handleSave}
-      className="flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-gray-600 backdrop-blur-sm transition-all hover:bg-white hover:text-red-500 hover:scale-110"
+      disabled={isLoading}
+      className={`flex h-8 w-8 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm transition-all hover:bg-white hover:scale-110 ${
+        isSaved ? 'text-red-500' : 'text-gray-600 hover:text-red-500'
+      } ${isLoading ? 'opacity-50' : ''}`}
       aria-label={isSaved ? 'Remove from saved' : 'Save property'}
     >
       <svg

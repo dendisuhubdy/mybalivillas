@@ -137,6 +137,12 @@ export default function Navbar() {
 
           {/* Desktop Auth / User Menu */}
           <div className="hidden items-center gap-3 lg:flex">
+            <Link
+              href={user ? '/list-property' : '/login?redirect=/list-property'}
+              className="btn-primary !py-2 !px-5 !text-sm"
+            >
+              List Property
+            </Link>
             {user ? (
               <div className="relative" ref={userMenuRef}>
                 <button
@@ -249,6 +255,15 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
+            </div>
+            <div className="mt-3 px-4">
+              <Link
+                href={user ? '/list-property' : '/login?redirect=/list-property'}
+                className="btn-primary block w-full !py-2.5 text-center"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                List Property
+              </Link>
             </div>
             <div className="mt-4 border-t border-gray-100 px-4 pt-4">
               {user ? (

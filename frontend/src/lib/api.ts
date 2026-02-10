@@ -6,6 +6,7 @@ import {
   AuthResponse,
   LoginRequest,
   RegisterRequest,
+  CreatePropertyRequest,
   ApiResponse,
   PaginatedResponse,
   User,
@@ -117,8 +118,18 @@ export async function register(
 }
 
 export async function getProfile(): Promise<ApiResponse<User>> {
-  return fetchApi<ApiResponse<User>>('/auth/profile', {
+  return fetchApi<ApiResponse<User>>('/users/me', {
     headers: getAuthHeaders(),
+  });
+}
+
+export async function updateProfile(
+  data: { full_name?: string; phone?: string; avatar_url?: string }
+): Promise<ApiResponse<User>> {
+  return fetchApi<ApiResponse<User>>('/users/me', {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(data),
   });
 }
 
@@ -137,24 +148,38 @@ export async function submitInquiry(
 }
 
 // ============================================================================
+// Create Property Endpoint
+// ============================================================================
+
+export async function createProperty(
+  data: CreatePropertyRequest
+): Promise<ApiResponse<Property>> {
+  return fetchApi<ApiResponse<Property>>('/properties', {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(data),
+  });
+}
+
+// ============================================================================
 // Saved Properties Endpoints
 // ============================================================================
 
 export async function getSavedProperties(): Promise<ApiResponse<Property[]>> {
-  return fetchApi<ApiResponse<Property[]>>('/saved-properties', {
+  return fetchApi<ApiResponse<Property[]>>('/users/me/saved', {
     headers: getAuthHeaders(),
   });
 }
 
 export async function saveProperty(id: string): Promise<ApiResponse<null>> {
-  return fetchApi<ApiResponse<null>>(`/saved-properties/${id}`, {
+  return fetchApi<ApiResponse<null>>(`/users/me/saved/${id}`, {
     method: 'POST',
     headers: getAuthHeaders(),
   });
 }
 
 export async function unsaveProperty(id: string): Promise<ApiResponse<null>> {
-  return fetchApi<ApiResponse<null>>(`/saved-properties/${id}`, {
+  return fetchApi<ApiResponse<null>>(`/users/me/saved/${id}`, {
     method: 'DELETE',
     headers: getAuthHeaders(),
   });
@@ -385,12 +410,12 @@ export const MOCK_PROPERTIES: Property[] = [
 ];
 
 export const MOCK_AREAS: Area[] = [
-  { id: '1', name: 'Seminyak', slug: 'seminyak', description: 'Trendy beachside area known for upscale dining and nightlife', property_count: 245 },
-  { id: '2', name: 'Canggu', slug: 'canggu', description: 'Surf-centric village with rice paddies and hip cafes', property_count: 312 },
-  { id: '3', name: 'Ubud', slug: 'ubud', description: 'Cultural heart of Bali with lush rice terraces and art', property_count: 189 },
-  { id: '4', name: 'Uluwatu', slug: 'uluwatu', description: 'Dramatic clifftop area with world-class surf breaks', property_count: 156 },
-  { id: '5', name: 'Sanur', slug: 'sanur', description: 'Relaxed coastal town popular with families and expats', property_count: 134 },
-  { id: '6', name: 'Nusa Dua', slug: 'nusa-dua', description: 'Exclusive resort enclave with pristine beaches', property_count: 98 },
-  { id: '7', name: 'Jimbaran', slug: 'jimbaran', description: 'Famous for seafood restaurants and sunset views', property_count: 87 },
-  { id: '8', name: 'Kuta', slug: 'kuta', description: 'Bustling tourist hub near the airport', property_count: 176 },
+  { id: '1', name: 'Seminyak', slug: 'seminyak', description: 'Trendy beachside area known for upscale dining and nightlife', image_url: '/images/areas/seminyak.jpg', property_count: 245 },
+  { id: '2', name: 'Canggu', slug: 'canggu', description: 'Surf-centric village with rice paddies and hip cafes', image_url: '/images/areas/canggu.jpg', property_count: 312 },
+  { id: '3', name: 'Ubud', slug: 'ubud', description: 'Cultural heart of Bali with lush rice terraces and art', image_url: '/images/areas/ubud.jpg', property_count: 189 },
+  { id: '4', name: 'Uluwatu', slug: 'uluwatu', description: 'Dramatic clifftop area with world-class surf breaks', image_url: '/images/areas/uluwatu.jpg', property_count: 156 },
+  { id: '5', name: 'Sanur', slug: 'sanur', description: 'Relaxed coastal town popular with families and expats', image_url: '/images/areas/sanur.jpg', property_count: 134 },
+  { id: '6', name: 'Nusa Dua', slug: 'nusa-dua', description: 'Exclusive resort enclave with pristine beaches', image_url: '/images/areas/nusa-dua.jpg', property_count: 98 },
+  { id: '7', name: 'Jimbaran', slug: 'jimbaran', description: 'Famous for seafood restaurants and sunset views', image_url: '/images/areas/jimbaran.jpg', property_count: 87 },
+  { id: '8', name: 'Kuta', slug: 'kuta', description: 'Bustling tourist hub near the airport', image_url: '/images/areas/kuta.jpg', property_count: 176 },
 ];

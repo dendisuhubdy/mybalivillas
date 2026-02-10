@@ -323,24 +323,18 @@ export default async function HomePage() {
                 href={`/properties?area=${area.slug}`}
                 className="group relative overflow-hidden rounded-xl"
               >
-                {/* Gradient Background */}
-                <div
-                  className={`aspect-[4/3] bg-gradient-to-br ${
-                    areaGradients[index % areaGradients.length]
-                  } transition-transform duration-500 group-hover:scale-105`}
-                >
-                  <div className="absolute inset-0 bg-black/20" />
-                  {/* Decorative Pattern */}
-                  <div className="absolute inset-0 opacity-10">
-                    <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg">
-                      <defs>
-                        <pattern id={`area-${index}`} x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
-                          <circle cx="15" cy="15" r="1" fill="white" />
-                        </pattern>
-                      </defs>
-                      <rect width="100%" height="100%" fill={`url(#area-${index})`} />
-                    </svg>
-                  </div>
+                {/* Area Image or Gradient Fallback */}
+                <div className="aspect-[4/3] transition-transform duration-500 group-hover:scale-105">
+                  {area.image_url ? (
+                    <img
+                      src={area.image_url}
+                      alt={area.name}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className={`h-full w-full bg-gradient-to-br ${areaGradients[index % areaGradients.length]}`} />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                 </div>
 
                 {/* Content */}

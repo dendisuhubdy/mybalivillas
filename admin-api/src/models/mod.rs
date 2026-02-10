@@ -287,17 +287,5 @@ pub struct RecentProperty {
     pub created_at: DateTime<Utc>,
 }
 
-// ---------------------------------------------------------------------------
-// Slug generation helper
-// ---------------------------------------------------------------------------
-
-pub fn slugify(title: &str) -> String {
-    title
-        .to_lowercase()
-        .chars()
-        .map(|c| if c.is_alphanumeric() || c == ' ' { c } else { ' ' })
-        .collect::<String>()
-        .split_whitespace()
-        .collect::<Vec<&str>>()
-        .join("-")
-}
+// Re-export slugify from shared crate
+pub use shared::utils::slugify;

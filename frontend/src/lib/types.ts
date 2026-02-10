@@ -90,6 +90,7 @@ export interface Agent {
 export interface User {
   id: string;
   name: string;
+  full_name: string;
   email: string;
   phone?: string;
   avatar_url?: string;
@@ -149,6 +150,28 @@ export interface RegisterRequest {
   phone?: string;
 }
 
+export interface CreatePropertyRequest {
+  title: string;
+  description?: string;
+  property_type: PropertyType;
+  listing_type: ListingType;
+  price: number;
+  currency?: string;
+  price_period?: PricePeriod;
+  bedrooms?: number;
+  bathrooms?: number;
+  land_size_sqm?: number;
+  building_size_sqm?: number;
+  area: string;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
+  year_built?: number;
+  features?: string[];
+  images?: { url: string; alt?: string }[];
+  thumbnail_url?: string;
+}
+
 export interface AuthResponse {
   user: User;
   token: string;
@@ -165,12 +188,9 @@ export interface ApiResponse<T> {
 }
 
 export interface PaginatedResponse<T> {
-  success: boolean;
-  data: T[];
-  pagination: {
-    total: number;
-    page: number;
-    per_page: number;
-    total_pages: number;
-  };
+  items: T[];
+  total: number;
+  page: number;
+  per_page: number;
+  total_pages: number;
 }

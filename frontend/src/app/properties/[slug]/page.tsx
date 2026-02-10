@@ -49,9 +49,10 @@ export default async function PropertyDetailPage({
   const similarProperties = await fetchSimilarProperties(property.id);
 
   // Handle API field name differences
-  const viewCount = (property as Record<string, unknown>).view_count as number ?? property.views_count ?? 0;
-  const landSize = (property as Record<string, unknown>).land_size_sqm as number ?? property.land_size;
-  const buildingSize = (property as Record<string, unknown>).building_size_sqm as number ?? property.building_size;
+  const propertyAny = property as unknown as Record<string, unknown>;
+  const viewCount = propertyAny.view_count as number ?? property.views_count ?? 0;
+  const landSize = propertyAny.land_size_sqm as number ?? property.land_size;
+  const buildingSize = propertyAny.building_size_sqm as number ?? property.building_size;
   const primaryImage = Array.isArray(property.images) && property.images.length > 0 && property.images[0]?.url
     ? property.images[0].url
     : undefined;

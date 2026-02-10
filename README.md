@@ -33,12 +33,15 @@ MyBaliVilla.com is a full-stack real estate property finder platform for Bali, I
 ## Features
 
 - **Property Search with Advanced Filters** -- filter by type, listing type, price range, bedrooms, bathrooms, area, and free-text search
-- **Multiple Listing Types** -- Buy (Sale), Long-term Rent, Short-term Rent
+- **Multiple Listing Types** -- Sale Freehold, Sale Leasehold, Short-term Rent, Long-term Rent
 - **Property Types** -- Villa, House, Apartment, Land, Commercial
 - **User Registration and Authentication** -- JWT-based auth with Argon2 password hashing
 - **Save / Favorite Properties** -- authenticated users can bookmark properties
 - **Property Inquiries** -- submit inquiries on any active listing
 - **Admin Dashboard with Analytics** -- total properties, users, inquiries, views, breakdowns by type and area
+- **List Your Property** -- authenticated users can submit new property listings via a multi-step form
+- **User Profile Management** -- view and edit profile, manage saved properties
+- **AI-Generated Area Images** -- area images generated via Gemini Nano Banana Pro
 - **Full Property CRUD Management** -- create, update, delete, toggle featured status
 - **User and Agent Management** -- create users, assign roles, toggle active status
 - **Inquiry Management** -- view, filter, and update inquiry statuses
@@ -233,6 +236,7 @@ mybalivilla.com/
 |       |-- db.rs                 # Database pool creation and migrations
 |       |-- auth.rs               # JWT and Argon2 password utilities
 |       |-- errors.rs             # AppError type with Axum response mapping
+|       |-- utils.rs              # Shared utilities (slugify, etc.)
 |       +-- lib.rs                # Module re-exports
 |
 |-- frontend/                     # Public website (Next.js 14, port 3000)
@@ -255,6 +259,10 @@ mybalivilla.com/
 |   |-- docker/                   # Docker-related configuration
 |   |-- nginx/                    # Nginx reverse proxy config and Dockerfile
 |   +-- scripts/                  # Deployment and setup scripts
+|
+|-- scripts/
+|   |-- generate_images.py        # AI property image generation (Gemini)
+|   +-- generate_area_images.py   # AI area image generation (Gemini)
 |
 |-- docker-compose.yml            # Local development compose
 |-- docker-compose.prod.yml       # Production compose

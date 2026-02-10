@@ -499,6 +499,30 @@ The admin panel includes several reusable components:
 |----------|---------------|-------------|
 | `NEXT_PUBLIC_ADMIN_API_URL` | `http://localhost:8081/api/admin` | Admin API base URL |
 
+### AI Image Generation
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `GEMINI_API_KEY` | (none) | Google Gemini API key for image generation |
+
+#### Generating Property Images
+
+```bash
+export GEMINI_API_KEY=your-api-key
+python3 scripts/generate_images.py
+```
+
+This generates 20 property images to `frontend/public/images/properties/`. Images that already exist (>1KB) are skipped.
+
+#### Generating Area Images
+
+```bash
+export GEMINI_API_KEY=your-api-key
+python3 scripts/generate_area_images.py
+```
+
+This generates 8 area images (Seminyak, Canggu, Ubud, etc.) to `frontend/public/images/areas/`. Both scripts use the Gemini Nano Banana Pro model with a 3-second rate limit between requests.
+
 ---
 
 ## Code Style and Conventions

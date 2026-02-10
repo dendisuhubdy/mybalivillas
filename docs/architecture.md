@@ -75,6 +75,7 @@ All services are containerized with Docker and orchestrated via Docker Compose. 
             |                   | - db.rs             |
             |                   | - auth.rs           |
             |                   | - errors.rs         |
+            |                   | - utils.rs          |
             |                   +----------+----------+
             |                              |
             |               +--------------+--------------+
@@ -174,7 +175,7 @@ All services are containerized with Docker and orchestrated via Docker Compose. 
 | `slug` | `VARCHAR` | UNIQUE, NOT NULL | URL-friendly slug |
 | `description` | `TEXT` | NOT NULL | Full description |
 | `property_type` | `property_type` | NOT NULL | `villa`, `house`, `apartment`, `land`, `commercial` |
-| `listing_type` | `listing_type` | NOT NULL | `sale`, `long_term_rent`, `short_term_rent` |
+| `listing_type` | `listing_type` | NOT NULL | `sale_freehold`, `sale_leasehold`, `short_term_rent`, `long_term_rent` |
 | `price` | `DECIMAL` | NOT NULL | Listing price |
 | `price_currency` | `VARCHAR` | NOT NULL | Currency code (e.g., `USD`, `IDR`) |
 | `price_period` | `price_period` | NULLABLE | `per_night`, `per_week`, `per_month`, `per_year` |
@@ -228,7 +229,7 @@ All services are containerized with Docker and orchestrated via Docker Compose. 
 | Enum | Values |
 |------|--------|
 | `property_type` | `villa`, `house`, `apartment`, `land`, `commercial` |
-| `listing_type` | `sale`, `long_term_rent`, `short_term_rent` |
+| `listing_type` | `sale_freehold`, `sale_leasehold`, `short_term_rent`, `long_term_rent` |
 | `price_period` | `per_night`, `per_week`, `per_month`, `per_year` |
 | `user_role` | `admin`, `agent`, `user` |
 | `inquiry_status` | `new`, `read`, `replied`, `closed` |
@@ -455,6 +456,45 @@ User (Browser)       Frontend        Public API         PostgreSQL
      |                  |<---------------|                   |
      |                  |                |                   |
      | Success toast    |                |                   |
+     |<-----------------|                |                   |
+```
+
+### User List Property Flow
+
+```
+User (Browser)       Frontend        Public API         PostgreSQL
+     |                  |                |                   |
+     | Click "List      |                |                   |
+     | Property"        |                |                   |
+     |----------------->|                |                   |
+     |                  | Check auth     |                   |
+     |                  | (localStorage) |                   |
+     |                  |                |                   |
+     | Multi-step form  |                |                   |
+     | (Basics, Details |                |                   |
+     | Location, Images)|                |                   |
+     |----------------->|                |                   |
+     |                  | POST /api/v1/  |                   |
+     |                  | properties     |                   |
+     |                  | Authorization: |                   |
+     |                  | Bearer <token> |                   |
+     |                  |--------------->|                   |
+     |                  |                | Verify JWT        |
+     |                  |                | Set owner_id      |
+     |                  |                | from claims       |
+     |                  |                |                   |
+     |                  |                | is_active =       |
+     |                  |                |   agent? true     |
+     |                  |                |   user?  false    |
+     |                  |                |                   |
+     |                  |                | Generate slug     |
+     |                  |                | INSERT property   |
+     |                  |                |------------------>|
+     |                  |                |<------------------|
+     |                  | {property}     |                   |
+     |                  |<---------------|                   |
+     | Success screen   |                |                   |
+     | (review status)  |                |                   |
      |<-----------------|                |                   |
 ```
 

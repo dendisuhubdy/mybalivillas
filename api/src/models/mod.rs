@@ -66,6 +66,7 @@ pub struct UserResponse {
     pub phone: Option<String>,
     pub avatar_url: Option<String>,
     pub role: UserRole,
+    pub created_at: DateTime<Utc>,
 }
 
 impl From<shared::models::User> for UserResponse {
@@ -77,6 +78,7 @@ impl From<shared::models::User> for UserResponse {
             phone: u.phone,
             avatar_url: u.avatar_url,
             role: u.role,
+            created_at: u.created_at,
         }
     }
 }
@@ -136,6 +138,33 @@ pub struct PropertyFilters {
     pub sort_by: Option<String>,
     pub page: Option<i64>,
     pub per_page: Option<i64>,
+}
+
+// ── Create Property DTO ──────────────────────────────────────────────────
+
+#[derive(Debug, Deserialize, Validate)]
+pub struct CreatePropertyRequest {
+    #[validate(length(min = 1, message = "Title is required"))]
+    pub title: String,
+    pub description: Option<String>,
+    pub property_type: PropertyType,
+    pub listing_type: ListingType,
+    pub price: Decimal,
+    pub currency: Option<String>,
+    pub price_period: Option<PricePeriod>,
+    pub bedrooms: Option<i32>,
+    pub bathrooms: Option<i32>,
+    pub land_size_sqm: Option<Decimal>,
+    pub building_size_sqm: Option<Decimal>,
+    #[validate(length(min = 1, message = "Area is required"))]
+    pub area: String,
+    pub address: Option<String>,
+    pub latitude: Option<Decimal>,
+    pub longitude: Option<Decimal>,
+    pub year_built: Option<i32>,
+    pub features: Option<serde_json::Value>,
+    pub images: Option<serde_json::Value>,
+    pub thumbnail_url: Option<String>,
 }
 
 // ── Inquiry DTOs ─────────────────────────────────────────────────────────

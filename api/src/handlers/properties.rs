@@ -1,14 +1,15 @@
 use axum::extract::{Path, Query, State};
 use axum::Json;
 use shared::errors::AppError;
+use shared::utils::slugify;
 use std::sync::Arc;
 use uuid::Uuid;
 use validator::Validate;
 
-use crate::middleware::auth::OptionalAuth;
+use crate::middleware::auth::{OptionalAuth, RequireAuth};
 use crate::models::{
-    ApiResponse, AreaCount, CreateInquiryRequest, PropertyFilters, PropertyListResponse,
-    PropertyResponse,
+    ApiResponse, AreaCount, CreateInquiryRequest, CreatePropertyRequest, PropertyFilters,
+    PropertyListResponse, PropertyResponse,
 };
 use crate::AppState;
 
@@ -253,4 +254,75 @@ pub async fn create_inquiry(
         "id": inquiry_id,
         "message": "Inquiry submitted successfully"
     }))))
+}
+
+/// POST /api/v1/properties
+///
+/// Create a new property listing. Requires authentication.
+/// Agents get their listings auto-activated; regular users need admin review.
+pub async fn create_property(
+    State(state): State<Arc<AppState>>,
+    RequireAuth(claims): RequireAuth,
+    Json(payload): Json<CreatePropertyRequest>,
+) -> Result<Json<ApiResponse<PropertyResponse>>, AppError> {
+    payload
+        .validate()
+        .map_err(|e| AppError::BadRequest(format!("Validation error: {e}")))?;
+
+    let owner_id: Uuid = claims
+        .sub
+        .parse()
+        .map_err(|_| AppError::Internal("Invalid user ID in token".to_string()))?;
+
+    // Agents get auto-activated; regular users need admin review
+    let is_active = claims.role == "agent" || claims.role == "Agent" || claims.role == "admin" || claims.role == "Admin";
+
+    let id = Uuid::new_v4();
+    let slug = format!("{}-{}", slugify(&payload.title), &id.to_string()[..8]);
+    let features = payload.features.unwrap_or(serde_json::json!([]));
+    let images = payload.images.unwrap_or(serde_json::json!([]));
+    let currency = payload.currency.unwrap_or_else(|| "USD".to_string());
+
+    let property: PropertyResponse = sqlx::query_as(
+        r#"INSERT INTO properties (
+            id, owner_id, title, slug, description, property_type, listing_type,
+            price, price_period, currency, area, address, latitude, longitude,
+            bedrooms, bathrooms, land_size_sqm, building_size_sqm, year_built,
+            features, images, thumbnail_url, is_featured, is_active, view_count
+        )
+        VALUES (
+            $1, $2, $3, $4, $5, $6, $7,
+            $8, $9, $10, $11, $12, $13, $14,
+            $15, $16, $17, $18, $19,
+            $20, $21, $22, false, $23, 0
+        )
+        RETURNING *"#,
+    )
+    .bind(id)
+    .bind(owner_id)
+    .bind(&payload.title)
+    .bind(&slug)
+    .bind(&payload.description)
+    .bind(&payload.property_type)
+    .bind(&payload.listing_type)
+    .bind(&payload.price)
+    .bind(&payload.price_period)
+    .bind(&currency)
+    .bind(&payload.area)
+    .bind(&payload.address)
+    .bind(&payload.latitude)
+    .bind(&payload.longitude)
+    .bind(payload.bedrooms)
+    .bind(payload.bathrooms)
+    .bind(&payload.land_size_sqm)
+    .bind(&payload.building_size_sqm)
+    .bind(payload.year_built)
+    .bind(&features)
+    .bind(&images)
+    .bind(&payload.thumbnail_url)
+    .bind(is_active)
+    .fetch_one(&state.pool)
+    .await?;
+
+    Ok(Json(ApiResponse::success(property)))
 }

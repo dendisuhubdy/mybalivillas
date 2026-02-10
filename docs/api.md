@@ -378,6 +378,64 @@ GET /api/v1/properties/stunning-3br-villa-in-canggu
 
 ---
 
+#### POST /api/v1/properties
+
+Create a new property listing. Requires authentication. Agents and admins get their listings auto-activated; regular users' listings require admin review.
+
+**Headers:** `Authorization: Bearer <token>` (required)
+
+**Request Body:**
+
+```json
+{
+  "title": "Luxury Villa in Seminyak",
+  "description": "Beautiful 4-bedroom villa...",
+  "property_type": "villa",
+  "listing_type": "sale_freehold",
+  "price": 850000,
+  "currency": "USD",
+  "bedrooms": 4,
+  "bathrooms": 4,
+  "land_size_sqm": 600,
+  "building_size_sqm": 450,
+  "area": "Seminyak",
+  "address": "Jl. Kayu Aya",
+  "features": ["Private Pool", "Garden"],
+  "images": [],
+  "thumbnail_url": "https://example.com/image.jpg"
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `title` | string | Yes | Property title (min 1 char) |
+| `description` | string | No | Property description |
+| `property_type` | string | Yes | See [Listing Types](#listing-types) |
+| `listing_type` | string | Yes | See [Listing Types](#listing-types) |
+| `price` | decimal | Yes | Property price |
+| `currency` | string | No | Currency code (default: `USD`) |
+| `price_period` | string | No | See [Price Periods](#price-periods) |
+| `bedrooms` | integer | No | Number of bedrooms |
+| `bathrooms` | integer | No | Number of bathrooms |
+| `land_size_sqm` | decimal | No | Land area in sqm |
+| `building_size_sqm` | decimal | No | Building area in sqm |
+| `area` | string | Yes | Location area (min 1 char) |
+| `address` | string | No | Street address |
+| `year_built` | integer | No | Year of construction |
+| `features` | JSON array | No | List of features |
+| `images` | JSON array | No | Image objects |
+| `thumbnail_url` | string | No | Main image URL |
+
+**Response (200 OK):** Returns the created property object.
+
+**Behavior:**
+- `owner_id` is set automatically from the JWT token
+- `is_featured` is always `false`
+- `is_active` is `true` for agents/admins, `false` for regular users (pending admin review)
+- `slug` is auto-generated: `{slugified-title}-{uuid-prefix}`
+
+---
+
 #### POST /api/v1/properties/:id/inquire
 
 Submit an inquiry for a specific property. Authentication is optional -- if the user is logged in, their user ID is attached to the inquiry.
@@ -1340,9 +1398,10 @@ All errors follow a consistent format:
 
 | Value | Description |
 |-------|-------------|
-| `Sale` | Property for sale |
-| `LongTermRent` | Long-term rental (yearly) |
-| `ShortTermRent` | Short-term rental (nightly/weekly/monthly) |
+| `sale_freehold` | Full ownership sale (freehold) |
+| `sale_leasehold` | Leasehold sale |
+| `short_term_rent` | Short-term rental (nightly/weekly/monthly) |
+| `long_term_rent` | Long-term rental (monthly/yearly) |
 
 ### Price Periods
 

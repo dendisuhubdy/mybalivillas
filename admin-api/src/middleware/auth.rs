@@ -31,25 +31,19 @@ impl FromRequestParts<Arc<AppState>> for RequireAdmin {
             .headers
             .get("Authorization")
             .and_then(|v| v.to_str().ok())
-            .ok_or_else(|| {
-                AppError::Unauthorized("Missing Authorization header".to_string())
-            })?;
+            .ok_or_else(|| AppError::Unauthorized("Missing Authorization header".to_string()))?;
 
         // Expect "Bearer <token>".
-        let token = auth_header
-            .strip_prefix("Bearer ")
-            .ok_or_else(|| {
-                AppError::Unauthorized("Invalid Authorization header format".to_string())
-            })?;
+        let token = auth_header.strip_prefix("Bearer ").ok_or_else(|| {
+            AppError::Unauthorized("Invalid Authorization header format".to_string())
+        })?;
 
         // Verify the token.
         let claims = verify_token(token, &state.jwt_secret)?;
 
         // Ensure the caller has an Admin role.
         if claims.role != "admin" && claims.role != "Admin" {
-            return Err(AppError::Unauthorized(
-                "Admin access required".to_string(),
-            ));
+            return Err(AppError::Unauthorized("Admin access required".to_string()));
         }
 
         Ok(RequireAdmin(claims))
@@ -57,10 +51,7 @@ impl FromRequestParts<Arc<AppState>> for RequireAdmin {
 }
 
 /// Middleware function for admin-only routes (alternative to the extractor).
-pub async fn require_admin_middleware(
-    req: Request,
-    next: Next,
-) -> Result<Response, AppError> {
+pub async fn require_admin_middleware(req: Request, next: Next) -> Result<Response, AppError> {
     let (mut parts, body) = req.into_parts();
 
     let state = parts
@@ -73,22 +64,16 @@ pub async fn require_admin_middleware(
         .headers
         .get("Authorization")
         .and_then(|v| v.to_str().ok())
-        .ok_or_else(|| {
-            AppError::Unauthorized("Missing Authorization header".to_string())
-        })?;
+        .ok_or_else(|| AppError::Unauthorized("Missing Authorization header".to_string()))?;
 
     let token = auth_header
         .strip_prefix("Bearer ")
-        .ok_or_else(|| {
-            AppError::Unauthorized("Invalid Authorization header format".to_string())
-        })?;
+        .ok_or_else(|| AppError::Unauthorized("Invalid Authorization header format".to_string()))?;
 
     let claims = verify_token(token, &state.jwt_secret)?;
 
     if claims.role != "admin" && claims.role != "Admin" {
-        return Err(AppError::Unauthorized(
-            "Admin access required".to_string(),
-        ));
+        return Err(AppError::Unauthorized("Admin access required".to_string()));
     }
 
     parts.extensions.insert(claims);

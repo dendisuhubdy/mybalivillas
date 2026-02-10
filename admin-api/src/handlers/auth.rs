@@ -34,12 +34,10 @@ pub async fn admin_login(
     .ok_or_else(|| AppError::Unauthorized("Invalid credentials".to_string()))?;
 
     // We also need the password hash (not in UserResponse for security).
-    let row = sqlx::query_scalar::<_, String>(
-        "SELECT password_hash FROM users WHERE email = $1",
-    )
-    .bind(&payload.email)
-    .fetch_one(&state.pool)
-    .await?;
+    let row = sqlx::query_scalar::<_, String>("SELECT password_hash FROM users WHERE email = $1")
+        .bind(&payload.email)
+        .fetch_one(&state.pool)
+        .await?;
 
     // Verify password.
     let valid = verify_password(&payload.password, &row)?;
@@ -56,9 +54,7 @@ pub async fn admin_login(
 
     // Check that the account is active.
     if !user.is_active {
-        return Err(AppError::Unauthorized(
-            "Account is deactivated".to_string(),
-        ));
+        return Err(AppError::Unauthorized("Account is deactivated".to_string()));
     }
 
     // Create JWT.

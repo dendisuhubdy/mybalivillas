@@ -41,10 +41,16 @@ pub async fn list_properties(
         "#,
     )
     .bind(params.property_type.as_ref().map(|t| {
-        serde_json::to_value(t).ok().and_then(|v| v.as_str().map(String::from)).unwrap_or_default()
+        serde_json::to_value(t)
+            .ok()
+            .and_then(|v| v.as_str().map(String::from))
+            .unwrap_or_default()
     }))
     .bind(params.listing_type.as_ref().map(|t| {
-        serde_json::to_value(t).ok().and_then(|v| v.as_str().map(String::from)).unwrap_or_default()
+        serde_json::to_value(t)
+            .ok()
+            .and_then(|v| v.as_str().map(String::from))
+            .unwrap_or_default()
     }))
     .bind(params.area.as_ref().map(|a| format!("%{a}%")))
     .bind(params.is_featured)
@@ -69,10 +75,16 @@ pub async fn list_properties(
         "#,
     )
     .bind(params.property_type.as_ref().map(|t| {
-        serde_json::to_value(t).ok().and_then(|v| v.as_str().map(String::from)).unwrap_or_default()
+        serde_json::to_value(t)
+            .ok()
+            .and_then(|v| v.as_str().map(String::from))
+            .unwrap_or_default()
     }))
     .bind(params.listing_type.as_ref().map(|t| {
-        serde_json::to_value(t).ok().and_then(|v| v.as_str().map(String::from)).unwrap_or_default()
+        serde_json::to_value(t)
+            .ok()
+            .and_then(|v| v.as_str().map(String::from))
+            .unwrap_or_default()
     }))
     .bind(params.area.as_ref().map(|a| format!("%{a}%")))
     .bind(params.is_featured)
@@ -113,7 +125,9 @@ pub async fn create_property(
     State(state): State<Arc<AppState>>,
     Json(payload): Json<CreatePropertyRequest>,
 ) -> Result<Json<ApiResponse<Property>>, AppError> {
-    payload.validate().map_err(|e| AppError::BadRequest(format!("Validation error: {e}")))?;
+    payload
+        .validate()
+        .map_err(|e| AppError::BadRequest(format!("Validation error: {e}")))?;
 
     let id = Uuid::new_v4();
     let slug = format!("{}-{}", slugify(&payload.title), &id.to_string()[..8]);

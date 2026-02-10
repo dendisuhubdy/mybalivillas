@@ -116,13 +116,27 @@ pub async fn list_properties(
     // Execute count query
     let mut count_query = sqlx::query_scalar::<_, i64>(&count_sql);
 
-    if let Some(ref v) = binds.property_type { count_query = count_query.bind(v); }
-    if let Some(ref v) = binds.listing_type { count_query = count_query.bind(v); }
-    if let Some(v) = binds.min_price { count_query = count_query.bind(v); }
-    if let Some(v) = binds.max_price { count_query = count_query.bind(v); }
-    if let Some(v) = binds.bedrooms { count_query = count_query.bind(v); }
-    if let Some(v) = binds.bathrooms { count_query = count_query.bind(v); }
-    if let Some(ref v) = binds.area { count_query = count_query.bind(v); }
+    if let Some(ref v) = binds.property_type {
+        count_query = count_query.bind(v);
+    }
+    if let Some(ref v) = binds.listing_type {
+        count_query = count_query.bind(v);
+    }
+    if let Some(v) = binds.min_price {
+        count_query = count_query.bind(v);
+    }
+    if let Some(v) = binds.max_price {
+        count_query = count_query.bind(v);
+    }
+    if let Some(v) = binds.bedrooms {
+        count_query = count_query.bind(v);
+    }
+    if let Some(v) = binds.bathrooms {
+        count_query = count_query.bind(v);
+    }
+    if let Some(ref v) = binds.area {
+        count_query = count_query.bind(v);
+    }
     if let Some(ref v) = binds.search {
         count_query = count_query.bind(v);
         count_query = count_query.bind(v);
@@ -133,13 +147,27 @@ pub async fn list_properties(
     // Execute data query
     let mut data_query = sqlx::query_as::<_, PropertyResponse>(&data_sql);
 
-    if let Some(ref v) = binds.property_type { data_query = data_query.bind(v); }
-    if let Some(ref v) = binds.listing_type { data_query = data_query.bind(v); }
-    if let Some(v) = binds.min_price { data_query = data_query.bind(v); }
-    if let Some(v) = binds.max_price { data_query = data_query.bind(v); }
-    if let Some(v) = binds.bedrooms { data_query = data_query.bind(v); }
-    if let Some(v) = binds.bathrooms { data_query = data_query.bind(v); }
-    if let Some(ref v) = binds.area { data_query = data_query.bind(v); }
+    if let Some(ref v) = binds.property_type {
+        data_query = data_query.bind(v);
+    }
+    if let Some(ref v) = binds.listing_type {
+        data_query = data_query.bind(v);
+    }
+    if let Some(v) = binds.min_price {
+        data_query = data_query.bind(v);
+    }
+    if let Some(v) = binds.max_price {
+        data_query = data_query.bind(v);
+    }
+    if let Some(v) = binds.bedrooms {
+        data_query = data_query.bind(v);
+    }
+    if let Some(v) = binds.bathrooms {
+        data_query = data_query.bind(v);
+    }
+    if let Some(ref v) = binds.area {
+        data_query = data_query.bind(v);
+    }
     if let Some(ref v) = binds.search {
         data_query = data_query.bind(v);
         data_query = data_query.bind(v);
@@ -149,10 +177,18 @@ pub async fn list_properties(
 
     let items: Vec<PropertyResponse> = data_query.fetch_all(&state.pool).await?;
 
-    let total_pages = if total == 0 { 0 } else { (total + per_page - 1) / per_page };
+    let total_pages = if total == 0 {
+        0
+    } else {
+        (total + per_page - 1) / per_page
+    };
 
     Ok(Json(ApiResponse::success(PropertyListResponse {
-        items, total, page, per_page, total_pages,
+        items,
+        total,
+        page,
+        per_page,
+        total_pages,
     })))
 }
 
@@ -219,20 +255,17 @@ pub async fn create_inquiry(
         .validate()
         .map_err(|e| AppError::BadRequest(format!("Validation error: {e}")))?;
 
-    let exists: Option<(Uuid,)> = sqlx::query_as(
-        "SELECT id FROM properties WHERE id = $1 AND is_active = true",
-    )
-    .bind(property_id)
-    .fetch_optional(&state.pool)
-    .await?;
+    let exists: Option<(Uuid,)> =
+        sqlx::query_as("SELECT id FROM properties WHERE id = $1 AND is_active = true")
+            .bind(property_id)
+            .fetch_optional(&state.pool)
+            .await?;
 
     if exists.is_none() {
         return Err(AppError::NotFound("Property not found".to_string()));
     }
 
-    let user_id: Option<Uuid> = claims
-        .as_ref()
-        .and_then(|c| c.sub.parse::<Uuid>().ok());
+    let user_id: Option<Uuid> = claims.as_ref().and_then(|c| c.sub.parse::<Uuid>().ok());
 
     let inquiry_id = Uuid::new_v4();
 
@@ -275,7 +308,10 @@ pub async fn create_property(
         .map_err(|_| AppError::Internal("Invalid user ID in token".to_string()))?;
 
     // Agents get auto-activated; regular users need admin review
-    let is_active = claims.role == "agent" || claims.role == "Agent" || claims.role == "admin" || claims.role == "Admin";
+    let is_active = claims.role == "agent"
+        || claims.role == "Agent"
+        || claims.role == "admin"
+        || claims.role == "Admin";
 
     let id = Uuid::new_v4();
     let slug = format!("{}-{}", slugify(&payload.title), &id.to_string()[..8]);

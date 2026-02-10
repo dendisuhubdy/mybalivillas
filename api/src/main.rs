@@ -31,8 +31,7 @@ async fn main() {
         .init();
 
     // Read required configuration from the environment.
-    let database_url =
-        std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     let jwt_secret =
         std::env::var("JWT_SECRET").unwrap_or_else(|_| "dev-secret-change-me".to_string());
 
@@ -64,7 +63,5 @@ async fn main() {
 
     tracing::info!("MyBaliVilla API listening on 0.0.0.0:8080");
 
-    axum::serve(listener, app)
-        .await
-        .expect("Server error");
+    axum::serve(listener, app).await.expect("Server error");
 }

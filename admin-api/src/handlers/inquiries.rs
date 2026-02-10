@@ -75,13 +75,11 @@ pub async fn get_inquiry(
     State(state): State<Arc<AppState>>,
     Path(id): Path<Uuid>,
 ) -> Result<Json<ApiResponse<Inquiry>>, AppError> {
-    let inquiry = sqlx::query_as::<_, Inquiry>(
-        "SELECT * FROM inquiries WHERE id = $1",
-    )
-    .bind(id)
-    .fetch_optional(&state.pool)
-    .await?
-    .ok_or_else(|| AppError::NotFound(format!("Inquiry {id} not found")))?;
+    let inquiry = sqlx::query_as::<_, Inquiry>("SELECT * FROM inquiries WHERE id = $1")
+        .bind(id)
+        .fetch_optional(&state.pool)
+        .await?
+        .ok_or_else(|| AppError::NotFound(format!("Inquiry {id} not found")))?;
 
     Ok(Json(ApiResponse::success(inquiry)))
 }

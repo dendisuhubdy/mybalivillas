@@ -9,7 +9,10 @@ use crate::AppState;
 
 pub fn routes(state: Arc<AppState>) -> Router {
     Router::new()
-        .route("/", get(handlers::properties::list_properties).post(handlers::properties::create_property))
+        .route(
+            "/",
+            get(handlers::properties::list_properties).post(handlers::properties::create_property),
+        )
         .route(
             "/{id}",
             get(handlers::properties::get_property)

@@ -80,9 +80,7 @@ pub async fn update_profile(
     }
 
     if set_clauses.is_empty() {
-        return Err(AppError::BadRequest(
-            "No fields to update".to_string(),
-        ));
+        return Err(AppError::BadRequest("No fields to update".to_string()));
     }
 
     set_clauses.push("updated_at = NOW()".to_string());
@@ -152,12 +150,11 @@ pub async fn save_property(
         .map_err(|_| AppError::Internal("Invalid user ID in token".to_string()))?;
 
     // Check the property exists
-    let exists: Option<(Uuid,)> = sqlx::query_as(
-        "SELECT id FROM properties WHERE id = $1 AND is_active = true",
-    )
-    .bind(property_id)
-    .fetch_optional(&state.pool)
-    .await?;
+    let exists: Option<(Uuid,)> =
+        sqlx::query_as("SELECT id FROM properties WHERE id = $1 AND is_active = true")
+            .bind(property_id)
+            .fetch_optional(&state.pool)
+            .await?;
 
     if exists.is_none() {
         return Err(AppError::NotFound("Property not found".to_string()));
@@ -193,18 +190,15 @@ pub async fn unsave_property(
         .parse()
         .map_err(|_| AppError::Internal("Invalid user ID in token".to_string()))?;
 
-    let result = sqlx::query(
-        "DELETE FROM saved_properties WHERE user_id = $1 AND property_id = $2",
-    )
-    .bind(user_id)
-    .bind(property_id)
-    .execute(&state.pool)
-    .await?;
+    let result =
+        sqlx::query("DELETE FROM saved_properties WHERE user_id = $1 AND property_id = $2")
+            .bind(user_id)
+            .bind(property_id)
+            .execute(&state.pool)
+            .await?;
 
     if result.rows_affected() == 0 {
-        return Err(AppError::NotFound(
-            "Saved property not found".to_string(),
-        ));
+        return Err(AppError::NotFound("Saved property not found".to_string()));
     }
 
     Ok(Json(ApiResponse::success(serde_json::json!({

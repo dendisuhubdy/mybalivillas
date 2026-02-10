@@ -23,12 +23,10 @@ pub async fn register(
         .map_err(|e| AppError::BadRequest(format!("Validation error: {e}")))?;
 
     // Check email uniqueness
-    let existing: Option<User> = sqlx::query_as(
-        "SELECT * FROM users WHERE email = $1",
-    )
-    .bind(&payload.email)
-    .fetch_optional(&state.pool)
-    .await?;
+    let existing: Option<User> = sqlx::query_as("SELECT * FROM users WHERE email = $1")
+        .bind(&payload.email)
+        .fetch_optional(&state.pool)
+        .await?;
 
     if existing.is_some() {
         return Err(AppError::Conflict(
@@ -73,13 +71,11 @@ pub async fn login(
     Json(payload): Json<LoginRequest>,
 ) -> Result<Json<ApiResponse<LoginResponse>>, AppError> {
     // Find user by email
-    let user: User = sqlx::query_as(
-        "SELECT * FROM users WHERE email = $1 AND is_active = true",
-    )
-    .bind(&payload.email)
-    .fetch_optional(&state.pool)
-    .await?
-    .ok_or_else(|| AppError::Unauthorized("Invalid email or password".to_string()))?;
+    let user: User = sqlx::query_as("SELECT * FROM users WHERE email = $1 AND is_active = true")
+        .bind(&payload.email)
+        .fetch_optional(&state.pool)
+        .await?
+        .ok_or_else(|| AppError::Unauthorized("Invalid email or password".to_string()))?;
 
     // Verify password
     let valid = verify_password(&payload.password, &user.password_hash)?;

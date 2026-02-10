@@ -17,32 +17,25 @@ pub async fn get_stats(
     State(state): State<Arc<AppState>>,
 ) -> Result<Json<ApiResponse<DashboardStats>>, AppError> {
     // Total properties.
-    let total_properties = sqlx::query_scalar::<_, i64>(
-        "SELECT COUNT(*) FROM properties",
-    )
-    .fetch_one(&state.pool)
-    .await?;
+    let total_properties = sqlx::query_scalar::<_, i64>("SELECT COUNT(*) FROM properties")
+        .fetch_one(&state.pool)
+        .await?;
 
     // Active properties.
-    let active_properties = sqlx::query_scalar::<_, i64>(
-        "SELECT COUNT(*) FROM properties WHERE is_active = true",
-    )
-    .fetch_one(&state.pool)
-    .await?;
+    let active_properties =
+        sqlx::query_scalar::<_, i64>("SELECT COUNT(*) FROM properties WHERE is_active = true")
+            .fetch_one(&state.pool)
+            .await?;
 
     // Total users.
-    let total_users = sqlx::query_scalar::<_, i64>(
-        "SELECT COUNT(*) FROM users",
-    )
-    .fetch_one(&state.pool)
-    .await?;
+    let total_users = sqlx::query_scalar::<_, i64>("SELECT COUNT(*) FROM users")
+        .fetch_one(&state.pool)
+        .await?;
 
     // Total inquiries.
-    let total_inquiries = sqlx::query_scalar::<_, i64>(
-        "SELECT COUNT(*) FROM inquiries",
-    )
-    .fetch_one(&state.pool)
-    .await?;
+    let total_inquiries = sqlx::query_scalar::<_, i64>("SELECT COUNT(*) FROM inquiries")
+        .fetch_one(&state.pool)
+        .await?;
 
     // New inquiries in the last 7 days.
     let new_inquiries = sqlx::query_scalar::<_, i64>(
@@ -52,11 +45,10 @@ pub async fn get_stats(
     .await?;
 
     // Total views across all properties.
-    let total_views = sqlx::query_scalar::<_, i64>(
-        "SELECT COALESCE(SUM(view_count::bigint), 0) FROM properties",
-    )
-    .fetch_one(&state.pool)
-    .await?;
+    let total_views =
+        sqlx::query_scalar::<_, i64>("SELECT COALESCE(SUM(view_count::bigint), 0) FROM properties")
+            .fetch_one(&state.pool)
+            .await?;
 
     // Properties grouped by type.
     let properties_by_type = sqlx::query_as::<_, TypeCount>(

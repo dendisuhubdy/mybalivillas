@@ -88,12 +88,11 @@ pub async fn create_user(
         .map_err(|e| AppError::BadRequest(format!("Validation error: {e}")))?;
 
     // Check for duplicate email.
-    let exists = sqlx::query_scalar::<_, bool>(
-        "SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)",
-    )
-    .bind(&payload.email)
-    .fetch_one(&state.pool)
-    .await?;
+    let exists =
+        sqlx::query_scalar::<_, bool>("SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)")
+            .bind(&payload.email)
+            .fetch_one(&state.pool)
+            .await?;
 
     if exists {
         return Err(AppError::Conflict(format!(

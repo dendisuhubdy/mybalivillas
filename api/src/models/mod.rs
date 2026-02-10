@@ -25,6 +25,7 @@ impl<T: Serialize> ApiResponse<T> {
         }
     }
 
+    #[allow(dead_code)]
     pub fn error(message: impl Into<String>) -> Self {
         Self {
             success: false,

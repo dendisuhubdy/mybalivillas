@@ -27,6 +27,7 @@ impl<T: Serialize> ApiResponse<T> {
         }
     }
 
+    #[allow(dead_code)]
     pub fn message(msg: impl Into<String>) -> Self {
         Self {
             success: true,
@@ -52,7 +53,7 @@ impl PaginationParams {
     }
 
     pub fn limit(&self) -> i64 {
-        self.per_page.unwrap_or(20).min(100).max(1)
+        self.per_page.unwrap_or(20).clamp(1, 100)
     }
 
     pub fn current_page(&self) -> i64 {

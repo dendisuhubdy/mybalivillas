@@ -51,6 +51,7 @@ impl FromRequestParts<Arc<AppState>> for RequireAdmin {
 }
 
 /// Middleware function for admin-only routes (alternative to the extractor).
+#[allow(dead_code)]
 pub async fn require_admin_middleware(req: Request, next: Next) -> Result<Response, AppError> {
     let (mut parts, body) = req.into_parts();
 

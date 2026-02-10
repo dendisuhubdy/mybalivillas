@@ -1,0 +1,56 @@
+# =============================================================================
+# MyBaliVilla.com - Docker Ignore
+# Files and directories excluded from Docker build context
+# =============================================================================
+
+# Version control
+.git
+.gitignore
+
+# Environment files (secrets should not be in images)
+.env
+.env.*
+!.env.example
+
+# Rust build artifacts
+target/
+
+# Node.js dependencies (will be installed in container)
+node_modules/
+frontend/node_modules/
+admin-panel/node_modules/
+
+# Next.js build output (will be built in container)
+frontend/.next/
+admin-panel/.next/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation
+docs/
+*.md
+LICENSE
+
+# Backups
+backups/
+
+# Infrastructure scripts (not needed in app containers)
+infrastructure/scripts/
+
+# Test files
+**/*.test.*
+**/*.spec.*
+**/__tests__/
+
+# Logs
+*.log
+logs/

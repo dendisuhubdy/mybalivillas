@@ -1,0 +1,114 @@
+# =============================================================================
+# MyBaliVilla.com - Local Development Docker Compose
+# Usage: docker compose up --build
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # PostgreSQL 16 - Primary database
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: mybalivilla-postgres
+    environment:
+      POSTGRES_DB: mybalivilla
+      POSTGRES_USER: mybalivilla
+      POSTGRES_PASSWORD: localdevpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mybalivilla -d mybalivilla"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ---------------------------------------------------------------------------
+  # Redis 7 - Caching and session storage
+  # ---------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: mybalivilla-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ---------------------------------------------------------------------------
+  # Public API - Rust/Axum (port 8080)
+  # ---------------------------------------------------------------------------
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: mybalivilla-api
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: postgres://mybalivilla:localdevpassword@postgres:5432/mybalivilla
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: dev-jwt-secret-change-in-production
+      RUST_LOG: info
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # ---------------------------------------------------------------------------
+  # Admin API - Rust/Axum (port 8081)
+  # ---------------------------------------------------------------------------
+  admin-api:
+    build:
+      context: .
+      dockerfile: admin-api/Dockerfile
+    container_name: mybalivilla-admin-api
+    ports:
+      - "8081:8081"
+    environment:
+      DATABASE_URL: postgres://mybalivilla:localdevpassword@postgres:5432/mybalivilla
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: dev-jwt-secret-change-in-production
+      RUST_LOG: info
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # ---------------------------------------------------------------------------
+  # Frontend - Next.js public website (port 3000)
+  # ---------------------------------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+    container_name: mybalivilla-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080/api/v1
+    depends_on:
+      - api
+
+  # ---------------------------------------------------------------------------
+  # Admin Panel - Next.js admin dashboard (port 3001)
+  # ---------------------------------------------------------------------------
+  admin-panel:
+    build:
+      context: ./admin-panel
+    container_name: mybalivilla-admin-panel
+    ports:
+      - "3001:3001"
+    environment:
+      NEXT_PUBLIC_ADMIN_API_URL: http://localhost:8081/api/admin
+    depends_on:
+      - admin-api
+
+volumes:
+  postgres_data:
+    driver: local

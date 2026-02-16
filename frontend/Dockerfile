@@ -40,6 +40,10 @@ COPY . .
 # Disable telemetry during build
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Accept API URL as build arg (NEXT_PUBLIC_* must be set at build time)
+ARG NEXT_PUBLIC_API_URL=https://api.mybali.villas/api/v1
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 RUN npm run build
 
 # ---------------------------------------------------------------------------

@@ -24,9 +24,10 @@ CREATE TYPE property_type AS ENUM (
 
 -- How the property is listed
 CREATE TYPE listing_type AS ENUM (
-    'sale',
-    'long_term_rent',
-    'short_term_rent'
+    'sale_freehold',
+    'sale_leasehold',
+    'short_term_rent',
+    'long_term_rent'
 );
 
 -- Price period for rental properties

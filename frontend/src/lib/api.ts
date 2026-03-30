@@ -211,10 +211,10 @@ export const MOCK_PROPERTIES: Property[] = [
     city: 'Badung',
     features: ['Private Pool', 'Beach Access', 'Garden', 'Parking', 'Security', 'Furnished'],
     images: [
-      { id: '1', url: '', alt: 'Villa exterior', is_primary: true, order: 0 },
-      { id: '2', url: '', alt: 'Pool area', is_primary: false, order: 1 },
-      { id: '3', url: '', alt: 'Living room', is_primary: false, order: 2 },
-      { id: '4', url: '', alt: 'Bedroom', is_primary: false, order: 3 },
+      { id: '1', url: '/images/properties/luxury-beachfront-villa-seminyak-1.png', alt: 'Villa exterior', is_primary: true, order: 0 },
+      { id: '2', url: '/images/properties/luxury-beachfront-villa-seminyak-2.png', alt: 'Pool area', is_primary: false, order: 1 },
+      { id: '3', url: '/images/properties/luxury-beachfront-villa-seminyak-3.png', alt: 'Living room', is_primary: false, order: 2 },
+      { id: '4', url: '/images/properties/luxury-beachfront-villa-seminyak-4.png', alt: 'Bedroom', is_primary: false, order: 3 },
     ],
     agent: {
       id: 'a1',
@@ -251,8 +251,8 @@ export const MOCK_PROPERTIES: Property[] = [
     city: 'Badung',
     features: ['Private Pool', 'Rooftop Terrace', 'Fully Furnished', 'WiFi', 'AC'],
     images: [
-      { id: '5', url: '', alt: 'Villa front', is_primary: true, order: 0 },
-      { id: '6', url: '', alt: 'Pool', is_primary: false, order: 1 },
+      { id: '5', url: '/images/properties/modern-tropical-villa-canggu-1.png', alt: 'Villa front', is_primary: true, order: 0 },
+      { id: '6', url: '/images/properties/modern-tropical-villa-canggu-2.png', alt: 'Pool', is_primary: false, order: 1 },
     ],
     agent: {
       id: 'a2',
@@ -289,7 +289,7 @@ export const MOCK_PROPERTIES: Property[] = [
     city: 'Gianyar',
     features: ['Rice Field View', 'Private Pool', 'Yoga Deck', 'Breakfast Included', 'WiFi'],
     images: [
-      { id: '7', url: '', alt: 'Rice field view', is_primary: true, order: 0 },
+      { id: '7', url: '/images/properties/traditional-balinese-compound-ubud-1.png', alt: 'Rice field view', is_primary: true, order: 0 },
     ],
     agent: {
       id: 'a3',
@@ -323,7 +323,7 @@ export const MOCK_PROPERTIES: Property[] = [
     city: 'Badung',
     features: ['Ocean View', 'Communal Pool', 'Gym', 'Security 24/7', 'Parking'],
     images: [
-      { id: '8', url: '', alt: 'Apartment view', is_primary: true, order: 0 },
+      { id: '8', url: '/images/properties/clifftop-villa-uluwatu-1.png', alt: 'Apartment view', is_primary: true, order: 0 },
     ],
     agent: {
       id: 'a1',
@@ -355,7 +355,7 @@ export const MOCK_PROPERTIES: Property[] = [
     city: 'Badung',
     features: ['Freehold', 'Flat Terrain', 'Road Access', 'Electricity', 'Water'],
     images: [
-      { id: '9', url: '', alt: 'Land plot', is_primary: true, order: 0 },
+      { id: '9', url: '/images/properties/prime-investment-land-canggu-1.png', alt: 'Land plot', is_primary: true, order: 0 },
     ],
     agent: {
       id: 'a2',
@@ -392,7 +392,7 @@ export const MOCK_PROPERTIES: Property[] = [
     city: 'Denpasar',
     features: ['Garden', 'Garage', 'Furnished', 'Near Beach', 'Near Schools'],
     images: [
-      { id: '10', url: '', alt: 'House exterior', is_primary: true, order: 0 },
+      { id: '10', url: '/images/properties/charming-beach-house-sanur-1.png', alt: 'House exterior', is_primary: true, order: 0 },
     ],
     agent: {
       id: 'a3',

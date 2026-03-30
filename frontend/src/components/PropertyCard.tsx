@@ -16,8 +16,10 @@ interface PropertyCardProps {
 
 export default function PropertyCard({ property }: PropertyCardProps) {
   // Get the primary image URL from images array or thumbnail
+  // Handle both plain string arrays (from API/DB) and PropertyImage objects (from mock data)
   const primaryImage =
-    (Array.isArray(property.images) && property.images.length > 0 && property.images[0]?.url) ||
+    (Array.isArray(property.images) && property.images.length > 0 &&
+      (typeof property.images[0] === 'string' ? property.images[0] : property.images[0]?.url)) ||
     undefined;
 
   const listingBadgeColor =

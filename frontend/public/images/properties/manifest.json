@@ -1,0 +1,170 @@
+{
+  "001": {
+    "slug": "luxury-beachfront-villa-seminyak",
+    "images": [
+      "/images/properties/luxury-beachfront-villa-seminyak-1.png",
+      "/images/properties/luxury-beachfront-villa-seminyak-2.png",
+      "/images/properties/luxury-beachfront-villa-seminyak-3.png",
+      "/images/properties/luxury-beachfront-villa-seminyak-4.png"
+    ],
+    "thumbnail": "/images/properties/luxury-beachfront-villa-seminyak-1.png"
+  },
+  "002": {
+    "slug": "modern-tropical-villa-canggu",
+    "images": [
+      "/images/properties/modern-tropical-villa-canggu-1.png",
+      "/images/properties/modern-tropical-villa-canggu-2.png",
+      "/images/properties/modern-tropical-villa-canggu-3.png"
+    ],
+    "thumbnail": "/images/properties/modern-tropical-villa-canggu-1.png"
+  },
+  "003": {
+    "slug": "traditional-balinese-compound-ubud",
+    "images": [
+      "/images/properties/traditional-balinese-compound-ubud-1.png",
+      "/images/properties/traditional-balinese-compound-ubud-2.png",
+      "/images/properties/traditional-balinese-compound-ubud-3.png"
+    ],
+    "thumbnail": "/images/properties/traditional-balinese-compound-ubud-1.png"
+  },
+  "004": {
+    "slug": "clifftop-villa-uluwatu",
+    "images": [
+      "/images/properties/clifftop-villa-uluwatu-1.png",
+      "/images/properties/clifftop-villa-uluwatu-2.png",
+      "/images/properties/clifftop-villa-uluwatu-3.png"
+    ],
+    "thumbnail": "/images/properties/clifftop-villa-uluwatu-1.png"
+  },
+  "005": {
+    "slug": "charming-beach-house-sanur",
+    "images": [
+      "/images/properties/charming-beach-house-sanur-1.png",
+      "/images/properties/charming-beach-house-sanur-2.png"
+    ],
+    "thumbnail": "/images/properties/charming-beach-house-sanur-1.png"
+  },
+  "006": {
+    "slug": "premium-penthouse-nusa-dua",
+    "images": [
+      "/images/properties/premium-penthouse-nusa-dua-1.png",
+      "/images/properties/premium-penthouse-nusa-dua-2.png"
+    ],
+    "thumbnail": "/images/properties/premium-penthouse-nusa-dua-1.png"
+  },
+  "007": {
+    "slug": "prime-investment-land-canggu",
+    "images": [
+      "/images/properties/prime-investment-land-canggu-1.png",
+      "/images/properties/prime-investment-land-canggu-2.png"
+    ],
+    "thumbnail": "/images/properties/prime-investment-land-canggu-1.png"
+  },
+  "008": {
+    "slug": "prime-commercial-space-seminyak",
+    "images": [
+      "/images/properties/prime-commercial-space-seminyak-1.png",
+      "/images/properties/prime-commercial-space-seminyak-2.png"
+    ],
+    "thumbnail": "/images/properties/prime-commercial-space-seminyak-1.png"
+  },
+  "009": {
+    "slug": "luxury-pool-villa-jimbaran",
+    "images": [
+      "/images/properties/luxury-pool-villa-jimbaran-1.png",
+      "/images/properties/luxury-pool-villa-jimbaran-2.png",
+      "/images/properties/luxury-pool-villa-jimbaran-3.png"
+    ],
+    "thumbnail": "/images/properties/luxury-pool-villa-jimbaran-1.png"
+  },
+  "010": {
+    "slug": "stylish-pool-villa-seminyak",
+    "images": [
+      "/images/properties/stylish-pool-villa-seminyak-1.png",
+      "/images/properties/stylish-pool-villa-seminyak-2.png"
+    ],
+    "thumbnail": "/images/properties/stylish-pool-villa-seminyak-1.png"
+  },
+  "011": {
+    "slug": "cozy-jungle-retreat-ubud",
+    "images": [
+      "/images/properties/cozy-jungle-retreat-ubud-1.png",
+      "/images/properties/cozy-jungle-retreat-ubud-2.png"
+    ],
+    "thumbnail": "/images/properties/cozy-jungle-retreat-ubud-1.png"
+  },
+  "012": {
+    "slug": "beachfront-apartment-sanur",
+    "images": [
+      "/images/properties/beachfront-apartment-sanur-1.png",
+      "/images/properties/beachfront-apartment-sanur-2.png"
+    ],
+    "thumbnail": "/images/properties/beachfront-apartment-sanur-1.png"
+  },
+  "013": {
+    "slug": "spacious-family-villa-canggu",
+    "images": [
+      "/images/properties/spacious-family-villa-canggu-1.png",
+      "/images/properties/spacious-family-villa-canggu-2.png",
+      "/images/properties/spacious-family-villa-canggu-3.png"
+    ],
+    "thumbnail": "/images/properties/spacious-family-villa-canggu-1.png"
+  },
+  "014": {
+    "slug": "minimalist-studio-ubud",
+    "images": [
+      "/images/properties/minimalist-studio-ubud-1.png",
+      "/images/properties/minimalist-studio-ubud-2.png"
+    ],
+    "thumbnail": "/images/properties/minimalist-studio-ubud-1.png"
+  },
+  "015": {
+    "slug": "modern-townhouse-seminyak",
+    "images": [
+      "/images/properties/modern-townhouse-seminyak-1.png",
+      "/images/properties/modern-townhouse-seminyak-2.png"
+    ],
+    "thumbnail": "/images/properties/modern-townhouse-seminyak-1.png"
+  },
+  "016": {
+    "slug": "grand-oceanfront-estate-uluwatu",
+    "images": [
+      "/images/properties/grand-oceanfront-estate-uluwatu-1.png",
+      "/images/properties/grand-oceanfront-estate-uluwatu-2.png",
+      "/images/properties/grand-oceanfront-estate-uluwatu-3.png"
+    ],
+    "thumbnail": "/images/properties/grand-oceanfront-estate-uluwatu-1.png"
+  },
+  "017": {
+    "slug": "eco-bamboo-house-ubud",
+    "images": [
+      "/images/properties/eco-bamboo-house-ubud-1.png",
+      "/images/properties/eco-bamboo-house-ubud-2.png"
+    ],
+    "thumbnail": "/images/properties/eco-bamboo-house-ubud-1.png"
+  },
+  "018": {
+    "slug": "luxury-resort-penthouse-nusa-dua",
+    "images": [
+      "/images/properties/luxury-resort-penthouse-nusa-dua-1.png",
+      "/images/properties/luxury-resort-penthouse-nusa-dua-2.png"
+    ],
+    "thumbnail": "/images/properties/luxury-resort-penthouse-nusa-dua-1.png"
+  },
+  "019": {
+    "slug": "surfers-paradise-uluwatu",
+    "images": [
+      "/images/properties/surfers-paradise-uluwatu-1.png",
+      "/images/properties/surfers-paradise-uluwatu-2.png"
+    ],
+    "thumbnail": "/images/properties/surfers-paradise-uluwatu-1.png"
+  },
+  "020": {
+    "slug": "hillside-land-jimbaran",
+    "images": [
+      "/images/properties/hillside-land-jimbaran-1.png",
+      "/images/properties/hillside-land-jimbaran-2.png"
+    ],
+    "thumbnail": "/images/properties/hillside-land-jimbaran-1.png"
+  }
+}

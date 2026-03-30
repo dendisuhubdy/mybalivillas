@@ -53,8 +53,8 @@ export default async function PropertyDetailPage({
   const viewCount = propertyAny.view_count as number ?? property.views_count ?? 0;
   const landSize = propertyAny.land_size_sqm as number ?? property.land_size;
   const buildingSize = propertyAny.building_size_sqm as number ?? property.building_size;
-  const primaryImage = Array.isArray(property.images) && property.images.length > 0 && property.images[0]?.url
-    ? property.images[0].url
+  const primaryImage = Array.isArray(property.images) && property.images.length > 0
+    ? (typeof property.images[0] === 'string' ? property.images[0] : property.images[0]?.url)
     : undefined;
 
   const listingBadgeColor =

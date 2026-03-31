@@ -5,6 +5,7 @@ import InquiryForm from '@/components/InquiryForm';
 import PropertyCard from '@/components/PropertyCard';
 import AmenitiesGrid from '@/components/AmenitiesGrid';
 import ReviewsSection from '@/components/ReviewsSection';
+import BookingWidget from '@/components/BookingWidget';
 import { getPropertyBySlug, getSimilarProperties, MOCK_PROPERTIES } from '@/lib/api';
 import { Property } from '@/lib/types';
 import {
@@ -329,6 +330,16 @@ export default async function PropertyDetailPage({
           {/* Sidebar */}
           <div className="lg:col-span-1">
             <div className="sticky top-24 space-y-6">
+              {/* Booking Widget (for rental properties) */}
+              <BookingWidget
+                propertyId={property.id}
+                propertyTitle={property.title}
+                price={property.price}
+                currency={property.currency}
+                pricePeriod={property.price_period}
+                listingType={property.listing_type}
+              />
+
               {/* Inquiry Form */}
               <InquiryForm
                 propertyId={property.id}

@@ -155,3 +155,107 @@ pub struct SavedProperty {
     pub property_id: Uuid,
     pub created_at: DateTime<Utc>,
 }
+
+// ---------------------------------------------------------------------------
+// Enums (migration 004)
+// ---------------------------------------------------------------------------
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, sqlx::Type)]
+#[sqlx(type_name = "booking_status", rename_all = "snake_case")]
+#[serde(rename_all = "snake_case")]
+pub enum BookingStatus {
+    Pending,
+    Confirmed,
+    CheckedIn,
+    CheckedOut,
+    Cancelled,
+    Refunded,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, sqlx::Type)]
+#[sqlx(type_name = "cancellation_policy_type", rename_all = "snake_case")]
+#[serde(rename_all = "snake_case")]
+pub enum CancellationPolicyType {
+    Flexible,
+    Moderate,
+    Strict,
+    NonRefundable,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, sqlx::Type)]
+#[sqlx(type_name = "rental_duration_type", rename_all = "snake_case")]
+#[serde(rename_all = "snake_case")]
+pub enum RentalDurationType {
+    Nightly,
+    Weekly,
+    Monthly,
+    Yearly,
+}
+
+// ---------------------------------------------------------------------------
+// Amenity
+// ---------------------------------------------------------------------------
+
+#[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
+pub struct Amenity {
+    pub id: Uuid,
+    pub slug: String,
+    pub name: String,
+    pub icon: String,
+    pub category: String,
+    pub sort_order: i32,
+    pub created_at: DateTime<Utc>,
+}
+
+// ---------------------------------------------------------------------------
+// Review
+// ---------------------------------------------------------------------------
+
+#[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
+pub struct Review {
+    pub id: Uuid,
+    pub property_id: Uuid,
+    pub booking_id: Option<Uuid>,
+    pub user_id: Uuid,
+    pub overall_rating: i16,
+    pub cleanliness_rating: Option<i16>,
+    pub location_rating: Option<i16>,
+    pub value_rating: Option<i16>,
+    pub communication_rating: Option<i16>,
+    pub title: Option<String>,
+    pub comment: String,
+    pub owner_response: Option<String>,
+    pub owner_responded_at: Option<DateTime<Utc>>,
+    pub is_approved: bool,
+    pub is_flagged: bool,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+}
+
+// ---------------------------------------------------------------------------
+// Booking
+// ---------------------------------------------------------------------------
+
+#[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
+pub struct Booking {
+    pub id: Uuid,
+    pub property_id: Uuid,
+    pub guest_id: Uuid,
+    pub pricing_tier_id: Option<Uuid>,
+    pub check_in: chrono::NaiveDate,
+    pub check_out: chrono::NaiveDate,
+    pub num_guests: i32,
+    pub special_requests: Option<String>,
+    pub base_price: Decimal,
+    pub cleaning_fee: Option<Decimal>,
+    pub service_fee: Option<Decimal>,
+    pub total_price: Decimal,
+    pub currency: String,
+    pub duration_type: RentalDurationType,
+    pub duration_count: i32,
+    pub status: BookingStatus,
+    pub cancelled_at: Option<DateTime<Utc>>,
+    pub cancellation_reason: Option<String>,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+}

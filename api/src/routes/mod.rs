@@ -1,4 +1,5 @@
 pub mod auth;
+pub mod bookings;
 pub mod properties;
 pub mod users;
 
@@ -18,7 +19,8 @@ pub fn create_router(state: Arc<AppState>) -> Router {
             Router::new()
                 .nest("/auth", auth::routes())
                 .nest("/properties", properties::routes())
-                .nest("/users", users::routes()),
+                .nest("/users", users::routes())
+                .nest("/bookings", bookings::routes()),
         )
         .layer(middleware::from_fn_with_state(
             state.clone(),

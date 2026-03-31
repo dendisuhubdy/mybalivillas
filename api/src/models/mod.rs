@@ -127,6 +127,8 @@ pub struct PropertyResponse {
     pub is_active: bool,
     pub is_featured: bool,
     pub view_count: i32,
+    pub avg_rating: Option<Decimal>,
+    pub review_count: Option<i32>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
@@ -202,4 +204,157 @@ pub struct UpdateProfileRequest {
     pub full_name: Option<String>,
     pub phone: Option<String>,
     pub avatar_url: Option<String>,
+}
+
+// ── Amenity DTOs ────────────────────────────────────────────────────────
+
+#[derive(Debug, Serialize, Deserialize, sqlx::FromRow)]
+pub struct AmenityResponse {
+    pub id: Uuid,
+    pub slug: String,
+    pub name: String,
+    pub icon: String,
+    pub category: String,
+}
+
+// ── Booking DTOs ────────────────────────────────────────────────────────
+
+#[derive(Debug, Deserialize, Validate)]
+pub struct CreateBookingRequest {
+    pub property_id: Uuid,
+    pub check_in: chrono::NaiveDate,
+    pub check_out: chrono::NaiveDate,
+    #[validate(range(min = 1, message = "At least 1 guest required"))]
+    pub num_guests: i32,
+    pub special_requests: Option<String>,
+    pub duration_type: shared::models::RentalDurationType,
+}
+
+#[derive(Debug, Serialize, sqlx::FromRow)]
+pub struct BookingResponse {
+    pub id: Uuid,
+    pub property_id: Uuid,
+    pub guest_id: Uuid,
+    pub check_in: chrono::NaiveDate,
+    pub check_out: chrono::NaiveDate,
+    pub num_guests: i32,
+    pub special_requests: Option<String>,
+    pub base_price: Decimal,
+    pub cleaning_fee: Option<Decimal>,
+    pub service_fee: Option<Decimal>,
+    pub total_price: Decimal,
+    pub currency: String,
+    pub duration_type: shared::models::RentalDurationType,
+    pub duration_count: i32,
+    pub status: shared::models::BookingStatus,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct BookingFilters {
+    pub status: Option<String>,
+    pub page: Option<i64>,
+    pub per_page: Option<i64>,
+}
+
+// ── Review DTOs ─────────────────────────────────────────────────────────
+
+#[derive(Debug, Deserialize, Validate)]
+pub struct CreateReviewRequest {
+    pub property_id: Uuid,
+    pub booking_id: Option<Uuid>,
+    #[validate(range(min = 1, max = 5, message = "Rating must be 1-5"))]
+    pub overall_rating: i16,
+    pub cleanliness_rating: Option<i16>,
+    pub location_rating: Option<i16>,
+    pub value_rating: Option<i16>,
+    pub communication_rating: Option<i16>,
+    pub title: Option<String>,
+    #[validate(length(min = 1, message = "Review comment is required"))]
+    pub comment: String,
+}
+
+#[derive(Debug, Serialize, sqlx::FromRow)]
+pub struct ReviewResponse {
+    pub id: Uuid,
+    pub property_id: Uuid,
+    pub user_id: Uuid,
+    pub overall_rating: i16,
+    pub cleanliness_rating: Option<i16>,
+    pub location_rating: Option<i16>,
+    pub value_rating: Option<i16>,
+    pub communication_rating: Option<i16>,
+    pub title: Option<String>,
+    pub comment: String,
+    pub owner_response: Option<String>,
+    pub is_approved: bool,
+    pub created_at: DateTime<Utc>,
+}
+
+#[derive(Debug, Serialize, sqlx::FromRow)]
+pub struct ReviewWithUser {
+    pub id: Uuid,
+    pub property_id: Uuid,
+    pub user_id: Uuid,
+    pub user_name: String,
+    pub user_avatar: Option<String>,
+    pub overall_rating: i16,
+    pub cleanliness_rating: Option<i16>,
+    pub location_rating: Option<i16>,
+    pub value_rating: Option<i16>,
+    pub communication_rating: Option<i16>,
+    pub title: Option<String>,
+    pub comment: String,
+    pub owner_response: Option<String>,
+    pub created_at: DateTime<Utc>,
+}
+
+// ── Property Rules DTOs ─────────────────────────────────────────────────
+
+#[derive(Debug, Serialize, sqlx::FromRow)]
+pub struct PropertyRulesResponse {
+    pub id: Uuid,
+    pub property_id: Uuid,
+    pub check_in_time: Option<chrono::NaiveTime>,
+    pub check_out_time: Option<chrono::NaiveTime>,
+    pub max_guests: Option<i32>,
+    pub pets_allowed: Option<bool>,
+    pub smoking_allowed: Option<bool>,
+    pub parties_allowed: Option<bool>,
+    pub quiet_hours_start: Option<chrono::NaiveTime>,
+    pub quiet_hours_end: Option<chrono::NaiveTime>,
+    pub custom_rules: Option<String>,
+    pub cancellation_policy: shared::models::CancellationPolicyType,
+    pub cancellation_details: Option<String>,
+}
+
+// ── Pricing Tier DTOs ───────────────────────────────────────────────────
+
+#[derive(Debug, Serialize, sqlx::FromRow)]
+pub struct PricingTierResponse {
+    pub id: Uuid,
+    pub property_id: Uuid,
+    pub duration_type: shared::models::RentalDurationType,
+    pub price: Decimal,
+    pub currency: String,
+    pub min_duration: Option<i32>,
+    pub max_duration: Option<i32>,
+    pub cleaning_fee: Option<Decimal>,
+    pub service_fee_percent: Option<Decimal>,
+    pub is_active: bool,
+}
+
+// ── Availability DTOs ───────────────────────────────────────────────────
+
+#[derive(Debug, Deserialize)]
+pub struct AvailabilityQuery {
+    pub start_date: chrono::NaiveDate,
+    pub end_date: chrono::NaiveDate,
+}
+
+#[derive(Debug, Serialize, sqlx::FromRow)]
+pub struct BlockedDateRange {
+    pub start_date: chrono::NaiveDate,
+    pub end_date: chrono::NaiveDate,
 }

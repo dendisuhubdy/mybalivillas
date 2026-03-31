@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import PropertyCard from '@/components/PropertyCard';
 import SearchBar from '@/components/SearchBar';
-import { getFeaturedProperties, getAreas, MOCK_PROPERTIES, MOCK_AREAS } from '@/lib/api';
-import { Property, Area } from '@/lib/types';
+import { getFeaturedProperties, MOCK_PROPERTIES } from '@/lib/api';
+import { Property } from '@/lib/types';
 
 async function fetchFeaturedProperties(): Promise<Property[]> {
   try {
@@ -12,26 +12,6 @@ async function fetchFeaturedProperties(): Promise<Property[]> {
     return MOCK_PROPERTIES;
   }
 }
-
-async function fetchAreas(): Promise<Area[]> {
-  try {
-    const response = await getAreas();
-    return response.data;
-  } catch {
-    return MOCK_AREAS;
-  }
-}
-
-const areaGradients = [
-  'from-teal-600 to-teal-800',
-  'from-emerald-600 to-emerald-800',
-  'from-cyan-600 to-cyan-800',
-  'from-sky-600 to-sky-800',
-  'from-indigo-600 to-indigo-800',
-  'from-amber-600 to-amber-800',
-  'from-rose-600 to-rose-800',
-  'from-violet-600 to-violet-800',
-];
 
 const whyChooseUs = [
   {
@@ -77,10 +57,7 @@ const whyChooseUs = [
 ];
 
 export default async function HomePage() {
-  const [properties, areas] = await Promise.all([
-    fetchFeaturedProperties(),
-    fetchAreas(),
-  ]);
+  const properties = await fetchFeaturedProperties();
 
   return (
     <>
@@ -307,61 +284,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ================================================================
-          POPULAR AREAS
-          ================================================================ */}
-      <section className="bg-gray-50 py-16 sm:py-20">
-        <div className="container-custom">
-          <div className="text-center">
-            <h2 className="section-heading">Explore Popular Areas</h2>
-            <p className="section-subheading mx-auto max-w-2xl">
-              From the surf breaks of Canggu to the cultural heart of Ubud,
-              discover properties in Bali&apos;s most sought-after neighborhoods
-            </p>
-          </div>
-
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {areas.slice(0, 8).map((area, index) => (
-              <Link
-                key={area.id}
-                href={`/properties?area=${area.slug}`}
-                className="group relative overflow-hidden rounded-xl"
-              >
-                {/* Area Image or Gradient Fallback */}
-                <div className="aspect-[4/3] transition-transform duration-500 group-hover:scale-105">
-                  {area.image_url ? (
-                    <img
-                      src={area.image_url}
-                      alt={area.name}
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <div className={`h-full w-full bg-gradient-to-br ${areaGradients[index % areaGradients.length]}`} />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                </div>
-
-                {/* Content */}
-                <div className="absolute inset-0 flex flex-col justify-end p-5">
-                  <h3 className="text-xl font-bold text-white drop-shadow-md">
-                    {area.name}
-                  </h3>
-                  <p className="mt-1 text-sm text-white/80">
-                    {area.property_count} properties
-                  </p>
-                </div>
-
-                {/* Hover Arrow */}
-                <div className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
-                  </svg>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ================================================================
           WHY CHOOSE US

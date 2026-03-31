@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import InquiryForm from '@/components/InquiryForm';
 import PropertyCard from '@/components/PropertyCard';
+import AmenitiesGrid from '@/components/AmenitiesGrid';
+import ReviewsSection from '@/components/ReviewsSection';
 import { getPropertyBySlug, getSimilarProperties, MOCK_PROPERTIES } from '@/lib/api';
 import { Property } from '@/lib/types';
 import {
@@ -259,6 +261,12 @@ export default async function PropertyDetailPage({
                 </div>
               </div>
             )}
+
+            {/* Amenities (from DB) */}
+            <AmenitiesGrid slug={params.slug} />
+
+            {/* Guest Reviews */}
+            <ReviewsSection slug={params.slug} />
 
             {/* Location */}
             <div className="mt-8">

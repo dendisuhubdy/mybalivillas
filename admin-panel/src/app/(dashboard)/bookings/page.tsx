@@ -35,7 +35,7 @@ export default function BookingsPage() {
         per_page: 20,
         status: statusFilter || undefined,
       });
-      setBookings(res.data || []);
+      setBookings(res.items || []);
       setTotalPages(res.total_pages || 0);
     } catch {
       setBookings([]);

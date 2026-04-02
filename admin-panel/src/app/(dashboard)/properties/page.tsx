@@ -180,8 +180,8 @@ export default function PropertiesPage() {
                     ))}
                   </tr>
                 ))
-              ) : data && data.data.length > 0 ? (
-                data.data.map((property) => (
+              ) : data && data.items.length > 0 ? (
+                data.items.map((property) => (
                   <tr key={property.id} className="hover:bg-slate-50 transition-colors">
                     <td className="px-4 py-3">
                       <div className="h-12 w-16 rounded-lg bg-slate-200 overflow-hidden flex-shrink-0">

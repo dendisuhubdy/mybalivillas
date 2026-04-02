@@ -40,10 +40,13 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ message: 'An error occurred' }));
-    throw new Error(error.message || `HTTP ${response.status}`);
+    // The API wraps errors in {error: {message, status}}
+    throw new Error(error.error?.message || error.message || `HTTP ${response.status}`);
   }
 
-  return response.json();
+  // The API wraps all success responses in {success: true, data: T}
+  const json = await response.json();
+  return (json.data ?? json) as T;
 }
 
 // Auth

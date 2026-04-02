@@ -22,7 +22,7 @@ export default function ReviewsPage() {
       if (filter === 'approved') params.is_approved = true;
 
       const res = await getReviews(params);
-      let data = res.data || [];
+      let data = res.items || [];
       if (filter === 'flagged') {
         data = data.filter((r) => r.is_flagged);
       }

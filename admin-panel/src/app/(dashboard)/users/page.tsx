@@ -199,8 +199,8 @@ export default function UsersPage() {
                     ))}
                   </tr>
                 ))
-              ) : data && data.data.length > 0 ? (
-                data.data.map((user) => (
+              ) : data && data.items.length > 0 ? (
+                data.items.map((user) => (
                   <tr key={user.id} className="hover:bg-slate-50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">

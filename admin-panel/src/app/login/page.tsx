@@ -20,7 +20,14 @@ export default function LoginPage() {
     try {
       const response = await login(email, password);
       localStorage.setItem('admin_token', response.token);
-      localStorage.setItem('admin_user', JSON.stringify(response.user));
+      // API returns full_name, frontend uses name
+      const user = response.user as unknown as Record<string, string>;
+      localStorage.setItem('admin_user', JSON.stringify({
+        id: user.id,
+        email: user.email,
+        name: user.full_name || user.name || user.email,
+        role: user.role,
+      }));
       router.push('/dashboard');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed. Please try again.');

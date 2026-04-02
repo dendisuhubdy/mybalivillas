@@ -112,8 +112,8 @@ export default function InquiriesPage() {
                     ))}
                   </tr>
                 ))
-              ) : data && data.data.length > 0 ? (
-                data.data.map((inquiry) => (
+              ) : data && data.items.length > 0 ? (
+                data.items.map((inquiry) => (
                   <tr key={inquiry.id} className="hover:bg-slate-50 transition-colors">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">

@@ -79,7 +79,7 @@ export default function UsersPage() {
 
   function openEditModal(user: User) {
     setEditingUser(user);
-    setFormName(user.name);
+    setFormName(user.full_name);
     setFormEmail(user.email);
     setFormPassword('');
     setFormRole(user.role);
@@ -95,13 +95,13 @@ export default function UsersPage() {
     try {
       if (editingUser) {
         await updateUser(editingUser.id, {
-          name: formName,
+          full_name: formName,
           email: formEmail,
           role: formRole,
         });
       } else {
         await createUser({
-          name: formName,
+          full_name: formName,
           email: formEmail,
           password: formPassword,
           role: formRole,
@@ -205,13 +205,13 @@ export default function UsersPage() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-sm font-semibold flex-shrink-0">
-                          {user.avatar ? (
-                            <img src={user.avatar} alt={user.name} className="h-full w-full rounded-full object-cover" />
+                          {user.avatar_url ? (
+                            <img src={user.avatar_url} alt={user.full_name} className="h-full w-full rounded-full object-cover" />
                           ) : (
-                            getInitials(user.name)
+                            getInitials(user.full_name)
                           )}
                         </div>
-                        <span className="text-sm font-medium text-slate-900">{user.name}</span>
+                        <span className="text-sm font-medium text-slate-900">{user.full_name}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-sm text-slate-600">{user.email}</td>

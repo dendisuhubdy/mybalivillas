@@ -168,7 +168,7 @@ export async function getUsers(params?: {
 }
 
 export async function createUser(data: {
-  name: string;
+  full_name: string;
   email: string;
   password: string;
   role: string;
@@ -183,7 +183,7 @@ export async function createUser(data: {
 
 export async function updateUser(
   id: string,
-  data: Partial<{ name: string; email: string; role: string }>
+  data: Partial<{ full_name: string; email: string; role: string }>
 ): Promise<User> {
   const response = await fetch(`${API_URL}/users/${id}`, {
     method: 'PUT',

@@ -77,8 +77,10 @@ pub async fn list_properties(
 
     if let Some(ref a) = filters.area {
         bind_idx += 1;
+        // Convert slug format (e.g. "nusa-dua") to match DB values (e.g. "Nusa Dua")
+        let area_pattern = a.replace('-', " ");
         conditions.push(format!("p.area ILIKE ${bind_idx}"));
-        binds.area = Some(format!("%{a}%"));
+        binds.area = Some(format!("%{area_pattern}%"));
     }
 
     if let Some(ref s) = filters.search {

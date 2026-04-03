@@ -145,7 +145,8 @@ export default async function PropertiesPage({ searchParams }: PropertiesPagePro
     } in Bali`;
   }
   if (searchParams.area) {
-    pageTitle += ` - ${searchParams.area.charAt(0).toUpperCase() + searchParams.area.slice(1)}`;
+    const areaLabel = areaOptions.find((a) => a.value === searchParams.area)?.label || searchParams.area.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    pageTitle += ` - ${areaLabel}`;
   }
 
   return (

@@ -17,15 +17,9 @@ export function formatPrice(
 
   let formatted = formatter.format(price);
 
-  // Convert IDR display
+  // Convert IDR display - show full number with thousand separators
   if (currency === 'IDR') {
-    if (price >= 1_000_000_000) {
-      formatted = `Rp ${(price / 1_000_000_000).toFixed(1)}B`;
-    } else if (price >= 1_000_000) {
-      formatted = `Rp ${(price / 1_000_000).toFixed(0)}M`;
-    } else {
-      formatted = `Rp ${price.toLocaleString()}`;
-    }
+    formatted = `Rp ${Math.round(price).toLocaleString('en-US')}`;
   }
 
   if (period && period !== PricePeriod.TOTAL) {

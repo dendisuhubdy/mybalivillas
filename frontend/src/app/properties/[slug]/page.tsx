@@ -96,9 +96,9 @@ export default async function PropertyDetailPage({
       {/* Image Gallery */}
       <div className="bg-white">
         <div className="container-custom py-4">
-          <div className="grid gap-2 sm:grid-cols-4 sm:grid-rows-2">
+          <div className="grid gap-2">
             {/* Main Image */}
-            <div className="relative sm:col-span-4">
+            <div className="relative">
               {primaryImage ? (
                 <div className="relative aspect-[21/9] overflow-hidden rounded-xl">
                   <Image
